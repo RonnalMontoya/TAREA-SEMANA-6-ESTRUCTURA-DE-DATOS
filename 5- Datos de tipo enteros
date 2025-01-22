@@ -1,0 +1,150 @@
+using System;
+
+class Nodo
+{
+    public int Dato;
+    public Nodo Siguiente;
+
+    public Nodo(int dato)
+    {
+        Dato = dato;
+        Siguiente = null;
+    }
+}
+
+class ListaEnlazada
+{
+    private Nodo cabeza;
+
+    public ListaEnlazada()
+    {
+        cabeza = null;
+    }
+
+    public void AgregarFinal(int dato)
+    {
+        Nodo nuevo = new Nodo(dato);
+        if (cabeza == null)
+        {
+            cabeza = nuevo;
+        }
+        else
+        {
+            Nodo actual = cabeza;
+            while (actual.Siguiente != null)
+            {
+                actual = actual.Siguiente;
+            }
+            actual.Siguiente = nuevo;
+        }
+    }
+
+    public void AgregarInicio(int dato)
+    {
+        Nodo nuevo = new Nodo(dato);
+        nuevo.Siguiente = cabeza;
+        cabeza = nuevo;
+    }
+
+    public int ContarElementos()
+    {
+        int contador = 0;
+        Nodo actual = cabeza;
+        while (actual != null)
+        {
+            contador++;
+            actual = actual.Siguiente;
+        }
+        return contador;
+    }
+
+    public void MostrarElementos()
+    {
+        Nodo actual = cabeza;
+        while (actual != null)
+        {
+            Console.Write(actual.Dato + " ");
+            actual = actual.Siguiente;
+        }
+        Console.WriteLine();
+    }
+}
+
+class Program
+{
+    static bool EsPrimo(int numero)
+    {
+        if (numero < 2) return false;
+        for (int i = 2; i <= Math.Sqrt(numero); i++)
+        {
+            if (numero % i == 0) return false;
+        }
+        return true;
+    }
+
+    static bool EsArmstrong(int numero)
+    {
+        int suma = 0, temp = numero;
+        int digitos = numero.ToString().Length;
+
+        while (temp > 0)
+        {
+            int digito = temp % 10;
+            suma += (int)Math.Pow(digito, digitos);
+            temp /= 10;
+        }
+
+        return suma == numero;
+    }
+
+    static void Main(string[] args)
+    {
+        ListaEnlazada listaPrimos = new ListaEnlazada();
+        ListaEnlazada listaArmstrong = new ListaEnlazada();
+
+        int[] numeros = { 2, 3, 5, 7, 11, 13, 17, 19, 153, 370, 371, 407 };
+
+        foreach (int numero in numeros)
+        {
+            if (EsPrimo(numero))
+            {
+                listaPrimos.AgregarFinal(numero);
+            }
+
+            if (EsArmstrong(numero))
+            {
+                listaArmstrong.AgregarInicio(numero);
+            }
+        }
+
+        Console.WriteLine("Lista de números primos:");
+        listaPrimos.MostrarElementos();
+        Console.WriteLine("Cantidad de números primos: " + listaPrimos.ContarElementos());
+
+        Console.WriteLine("\nLista de números Armstrong:");
+        listaArmstrong.MostrarElementos();
+        Console.WriteLine("Cantidad de números Armstrong: " + listaArmstrong.ContarElementos());
+
+        int totalPrimos = listaPrimos.ContarElementos();
+        int totalArmstrong = listaArmstrong.ContarElementos();
+
+        if (totalPrimos > totalArmstrong)
+        {
+            Console.WriteLine("\nLa lista de números primos tiene más elementos.");
+        }
+        else if (totalArmstrong > totalPrimos)
+        {
+            Console.WriteLine("\nLa lista de números Armstrong tiene más elementos.");
+        }
+        else
+        {
+            Console.WriteLine("\nAmbas listas tienen la misma cantidad de elementos.");
+        }
+
+        Console.WriteLine("\nTodos los elementos de la lista de números primos:");
+        listaPrimos.MostrarElementos();
+
+        Console.WriteLine("\nTodos los elementos de la lista de números Armstrong:");
+        listaArmstrong.MostrarElementos();
+    }
+}
